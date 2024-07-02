@@ -233,7 +233,7 @@ cdef list _extract_args(const_char *types, lo_arg **argv):
     return args
 
 cdef int _msg_callback(const_char *path, const_char *types, lo_arg **argv,
-                       int argc, lo_message msg, void *cb_data) with gil:
+                       int argc, lo_message msg, void *cb_data) noexcept with gil:
     args = _extract_args(types, argv)
 
     cdef char *url = lo_address_get_url(lo_message_get_source(msg))
@@ -281,13 +281,13 @@ cdef int _callback_num_args(func):
     return nargs if argspec.varargs is None else 5
 
 
-cdef int _bundle_start_callback(lo_timetag t, void *cb_data) with gil:
+cdef int _bundle_start_callback(lo_timetag t, void *cb_data) noexcept with gil:
     cb = <object>cb_data
     r = cb.start_func(_timetag_to_double(t), cb.user_data)
     return r if r is not None else 0
 
 
-cdef int _bundle_end_callback(void *cb_data) with gil:
+cdef int _bundle_end_callback(void *cb_data) noexcept with gil:
     cb = <object>cb_data
     r = cb.end_func(cb.user_data)
     return r if r is not None else 0
