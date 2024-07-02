@@ -293,7 +293,7 @@ cdef int _bundle_end_callback(void *cb_data) with gil:
     return r if r is not None else 0
 
 
-cdef void _err_handler(int num, const_char *msg, const_char *where) with gil:
+cdef void _err_handler(int num, const_char *msg, const_char *where) noexcept with gil :
     # can't raise exception in cdef callback function, so use a global variable
     # instead
     global __exception
